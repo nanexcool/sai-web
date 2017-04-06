@@ -1,9 +1,9 @@
 import React from 'react';
 
 const NoConnection = () => {
-    return (
-        <div>NoConnection</div>
-    )
+  return (
+    <div>Waiting for connection...</div>
+  )
 }
 
 export default NoConnection;

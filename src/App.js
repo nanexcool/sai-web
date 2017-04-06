@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import web3 from './web3';
+import web3, { initWeb3 } from './web3';
 import Main from './components/Main';
 import NoConnection from './components/NoConnection';
 import logo from './logo.svg';
@@ -9,15 +9,25 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      connected: false
+      connected: false,
+      defaultAccount: null,
     };
   }
   componentDidMount() {
     setTimeout(this.init, 500);
   }
   init = () => {
-    web3.setProvider(window.web3.currentProvider);
-    this.setState({ connected: true });
+    initWeb3(web3);
+    const defaultAccount = web3.eth.accounts[0];
+    web3.eth.defaultAccount = defaultAccount;
+    this.setState({
+      connected: true,
+      defaultAccount
+    });
+  }
+  toggle = () => {
+    const connected = !this.state.connected;
+    this.setState({ connected });
   }
   render() {
     return (
@@ -27,7 +37,7 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          <button onClick={this.toggle}>Toggle to connect or disconnect</button>
         </p>
         {this.state.connected ? <Main /> : <NoConnection />}
       </div>
@@ -36,3 +46,5 @@ class App extends Component {
 }
 
 export default App;
+
+window.l = console.log;
