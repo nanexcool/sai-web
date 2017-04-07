@@ -13,24 +13,24 @@ class Token extends Component {
   }
 
   componentDidMount() {
-    this.token = web3.eth.contract(dstoken.abi).at(this.props.address);
-    window[this.props.name.toLowerCase()] = this.token;
-    this.token.totalSupply((error, result) => {
-      if (!error) {
-        const totalSupply = web3.toDecimal(web3.fromWei(result));
-        this.setState({ totalSupply });
-      } else {
-        console.log(error);
-      }
-    })
-    this.token.balanceOf(web3.eth.coinbase, (error, result) => {
-      if (!error) {
-        const balance = web3.toDecimal(web3.fromWei(result));
-        this.setState({ balance });
-      } else {
-        console.log(error);
-      }
-    })
+    // this.token = web3.eth.contract(dstoken.abi).at(this.props.address);
+    // window[this.props.name.toLowerCase()] = this.token;
+    // this.token.totalSupply((error, result) => {
+    //   if (!error) {
+    //     const totalSupply = web3.toDecimal(web3.fromWei(result));
+    //     this.setState({ totalSupply });
+    //   } else {
+    //     console.log(error);
+    //   }
+    // });
+    // this.token.balanceOf(this.props.coinbase, (error, result) => {
+    //   if (!error) {
+    //     const balance = web3.toDecimal(web3.fromWei(result));
+    //     this.setState({ balance });
+    //   } else {
+    //     console.log(error);
+    //   }
+    // });
   }
 
   render() {
@@ -44,7 +44,7 @@ class Token extends Component {
           <div className="info-box-content">
 
             <span className="info-box-number">
-              Total: <AnimatedNumber value={this.state.totalSupply} stepPrecision={4}/>
+              Supply: <AnimatedNumber value={this.state.totalSupply} stepPrecision={4}/>
             </span>
             <span className="info-box-number">
               Yours: <AnimatedNumber value={this.state.balance} stepPrecision={4}/>

@@ -16,11 +16,13 @@ class App extends Component {
   }
   init = () => {
     initWeb3(web3);
-    const defaultAccount = web3.eth.accounts[0];
-    web3.eth.defaultAccount = defaultAccount;
-    this.setState({
-      connected: true,
-      defaultAccount
+    web3.eth.getAccounts((error, accounts) => {
+      const defaultAccount = accounts[0];
+      web3.eth.defaultAccount = defaultAccount;
+      this.setState({
+        connected: true,
+        defaultAccount
+      });
     });
   }
   toggle = () => {
@@ -43,7 +45,7 @@ class App extends Component {
 
         <section className="content">
 
-          {this.state.connected ? <Main /> : <NoConnection />}
+          {this.state.connected ? <Main coinbase={this.state.defaultAccount} /> : <NoConnection />}
 
         </section>
       </div>

@@ -31,6 +31,7 @@ class Medianizer extends Component {
   componentDidMount() {
     this.dsvalue.peek((error, result) => {
       if (!error) {
+        console.log(result);
         const median = web3.toDecimal(web3.fromWei(result[0]));
         this.setState({ median });
       } else {
@@ -68,7 +69,8 @@ class Medianizer extends Component {
                   <strong>Medianizer</strong>
                 </p>
                 <p>
-                  Last value: <span className="badge bg-green"><AnimatedNumber value={this.state.median} stepPrecision={4} /></span>
+                  Last value: <span className="badge bg-green">
+                  <AnimatedNumber value={this.state.median} stepPrecision={4} /></span>
                 </p>
                 <p>
                   <a href={`https://kovan.etherscan.io/address/${this.state.address}`} target="_blank">{this.state.address}</a>
