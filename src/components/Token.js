@@ -35,36 +35,25 @@ class Token extends Component {
 
   render() {
     return (
-      <div>
-        <h1>{this.props.name} Token</h1>
-        <h2>{this.props.address}</h2>
-        Total Supply: <AnimatedNumber value={this.state.totalSupply}
-          style={{
-            transition: '0.8s ease-out',
-            fontSize: 48,
-            transitionProperty:
-            'background-color, color, opacity'
-          }}
-          frameStyle={perc => (
-            perc === 100 ? {} : { backgroundColor: '#ffeb3b' }
-          )}
-          stepPrecision={4}
-          duration={300}
-          formatValue={n => n} />
-        <br/>
-        My Balance: <AnimatedNumber value={this.state.balance}
-          style={{
-            transition: '0.8s ease-out',
-            fontSize: 48,
-            transitionProperty:
-            'background-color, color, opacity'
-          }}
-          frameStyle={perc => (
-            perc === 100 ? {} : { backgroundColor: '#ffeb3b' }
-          )}
-          stepPrecision={4}
-          duration={300}
-          formatValue={n => n} />
+      <div className="col-md-3 col-sm-6 col-xs-12">
+        <div className="info-box">
+          <span className={`info-box-icon ${this.props.color}`}>
+            {this.props.name}
+          </span>
+
+          <div className="info-box-content">
+
+            <span className="info-box-number">
+              Total: <AnimatedNumber value={this.state.totalSupply} stepPrecision={4}/>
+            </span>
+            <span className="info-box-number">
+              Yours: <AnimatedNumber value={this.state.balance} stepPrecision={4}/>
+            </span>
+            <span className="info-box-number">
+              Tub: <AnimatedNumber value={this.state.balance} stepPrecision={4}/>
+            </span>
+          </div>
+        </div>
       </div>
     )
   }

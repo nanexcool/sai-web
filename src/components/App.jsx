@@ -29,11 +29,23 @@ class App extends Component {
   }
   render() {
     return (
-      <div>
-        <p>
-          <button onClick={this.toggle}>Toggle to connect or disconnect</button>
-        </p>
-        {this.state.connected ? <Main /> : <NoConnection />}
+      <div className="content-wrapper">
+        <section className="content-header">
+          <h1>
+            Sai Web
+            <small>Version 1.0 <button onClick={this.toggle}>Toggle to connect or disconnect</button></small>
+          </h1>
+          <ol className="breadcrumb">
+            <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
+            <li className="active">Dashboard</li>
+          </ol>
+        </section>
+
+        <section className="content">
+
+          {this.state.connected ? <Main /> : <NoConnection />}
+
+        </section>
       </div>
     );
   }

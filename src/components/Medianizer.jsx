@@ -37,7 +37,7 @@ class Medianizer extends Component {
         console.log(error);
       }
     });
-    this.state.caches.forEach((x,k) => this.read(k,x.address));
+    this.state.caches.forEach((x, k) => this.read(k, x.address));
   }
 
   read(key, address) {
@@ -56,12 +56,49 @@ class Medianizer extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Medianizer</h1>
-        <p><a href={`https://kovan.etherscan.io/address/${this.state.address}`} target="_blank">{this.state.address}</a> - {this.state.median}</p>
-        {this.state.caches.map((x,k) =>
-          <p key={k}><a href={`https://kovan.etherscan.io/address/${x.address}`} target="_blank">{x.address}</a> - {x.value}</p>)}
-        <AnimatedNumber value={this.state.median} />
+      <div className="col-md-4">
+        <div className="box">
+          <div className="box-header with-border">
+            <h3 className="box-title">Medianizer</h3>
+          </div>
+          <div className="box-body">
+            <div className="row">
+              <div className="col-md-12">
+                <p className="text-center">
+                  <strong>Medianizer</strong>
+                </p>
+                <p>
+                  Last value: <span className="badge bg-green"><AnimatedNumber value={this.state.median} stepPrecision={4} /></span>
+                </p>
+                <p>
+                  <a href={`https://kovan.etherscan.io/address/${this.state.address}`} target="_blank">{this.state.address}</a>
+                </p>
+                <h3>Retrieved median from:</h3>
+
+                <table className="table">
+                  <tbody>
+                    <tr>
+                      <th style={{ width: 10 + 'px' }}>#</th>
+                      <th>Address</th>
+                      <th style={{ width: 50 + 'px' }}>Value</th>
+                    </tr>
+                    {this.state.caches.map((x, k) =>
+                      <tr key={k}>
+                        <td>{k + 1}.</td>
+                        <td>
+                          <a href={`https://kovan.etherscan.io/address/${x.address}`} target="_blank">{x.address.substr(0,20)}...</a>
+                        </td>
+                        <td className="text-right">
+                          <span className="badge bg-green">{x.value}</span>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
