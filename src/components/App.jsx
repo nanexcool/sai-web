@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import web3, { initWeb3 } from './web3';
-import Main from './components/Main';
-import NoConnection from './components/NoConnection';
+import web3, { initWeb3 } from '../web3';
+import Main from './Main';
+import NoConnection from './NoConnection';
 
 class App extends Component {
   constructor() {

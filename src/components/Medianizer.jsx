@@ -8,6 +8,7 @@ class Medianizer extends Component {
     super();
     this.state = {
       median: 0,
+      address: '0xe8b1baec3656d54e1086ae3a6e762e822fc5ab7d',
       caches: [
         {
           address: '0x47f709071d1495a9fcfa76d88ec7befb2f2f75c6',
@@ -23,8 +24,7 @@ class Medianizer extends Component {
         },
       ]
     };
-    this.address = '0xe8b1baec3656d54e1086ae3a6e762e822fc5ab7d'
-    this.dsvalue = web3.eth.contract(dsvalue.abi).at(this.address);
+    this.dsvalue = web3.eth.contract(dsvalue.abi).at(this.state.address);
     window.dsvalue = this.dsvalue;
   }
 
@@ -33,7 +33,6 @@ class Medianizer extends Component {
       if (!error) {
         const median = web3.toDecimal(web3.fromWei(result[0]));
         this.setState({ median });
-        console.log({median});
       } else {
         console.log(error);
       }
@@ -45,12 +44,10 @@ class Medianizer extends Component {
     const c = web3.eth.contract(dsvalue.abi).at(address);
     c.peek((error, result) => {
       if (!error) {
-        console.log(address, result[0]);
         const value = web3.toDecimal(web3.fromWei(result[0]));
         const caches = this.state.caches;
         caches[key].value = value;
         this.setState({ caches });
-        console.log({value});
       } else {
         console.log(error);
       }
@@ -61,21 +58,10 @@ class Medianizer extends Component {
     return (
       <div>
         <h1>Medianizer</h1>
-        <h2>{this.address}</h2>
-        <AnimatedNumber value={this.state.median}
-          style={{
-            transition: '0.8s ease-out',
-            fontSize: 48,
-            transitionProperty:
-            'background-color, color, opacity'
-          }}
-          frameStyle={perc => (
-            perc === 100 ? {} : { backgroundColor: '#ffeb3b' }
-          )}
-          stepPrecision={4}
-          duration={300}
-          formatValue={n => n} />
-
+        <p><a href={`https://kovan.etherscan.io/address/${this.state.address}`} target="_blank">{this.state.address}</a> - {this.state.median}</p>
+        {this.state.caches.map((x,k) =>
+          <p key={k}><a href={`https://kovan.etherscan.io/address/${x.address}`} target="_blank">{x.address}</a> - {x.value}</p>)}
+        <AnimatedNumber value={this.state.median} />
       </div>
     )
   }
