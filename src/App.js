@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import web3, { initWeb3 } from './web3';
 import Main from './components/Main';
 import NoConnection from './components/NoConnection';
-import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
   constructor() {
@@ -31,12 +29,8 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
+      <div>
+        <p>
           <button onClick={this.toggle}>Toggle to connect or disconnect</button>
         </p>
         {this.state.connected ? <Main /> : <NoConnection />}
