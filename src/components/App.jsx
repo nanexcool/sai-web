@@ -8,6 +8,7 @@ class App extends Component {
     super();
     this.state = {
       connected: false,
+      connecting: true,
       defaultAccount: null,
     };
   }
@@ -15,14 +16,22 @@ class App extends Component {
     setTimeout(this.init, 500);
   }
   init = () => {
+    this.setState({ connecting: true });
     initWeb3(web3);
     web3.eth.getAccounts((error, accounts) => {
-      const defaultAccount = accounts[0];
-      web3.eth.defaultAccount = defaultAccount;
-      this.setState({
-        connected: true,
-        defaultAccount
-      });
+      if (!error) {
+        clearInterval(this.interval);
+        const defaultAccount = accounts[0];
+        web3.eth.defaultAccount = defaultAccount;
+        this.setState({
+          connected: true,
+          connecting: false,
+          defaultAccount
+        });
+      } else {
+        this.setState({ connecting: false });
+        //this.interval = setInterval(this.init, 5000);
+      }
     });
   }
   toggle = () => {
@@ -31,7 +40,7 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="content-wrapper">
+      <div>
         <section className="content-header">
           <h1>
             Sai Web
@@ -45,7 +54,12 @@ class App extends Component {
 
         <section className="content">
 
-          {this.state.connected ? <Main coinbase={this.state.defaultAccount} /> : <NoConnection />}
+          {this.state.connecting ?
+            <NoConnection connecting={this.state.connecting} /> :
+            (this.state.connected ?
+              <Main coinbase={this.state.defaultAccount} /> :
+              <NoConnection connecting={this.state.connecting} />)
+          }
 
         </section>
       </div>

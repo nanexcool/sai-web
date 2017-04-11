@@ -17,12 +17,15 @@ class Main extends React.Component {
     this.state = {
       balance: 0,
       tub: {
-        gem: {},
-        sai: {},
-        sin: {},
-        skr: {},
-        pot: {}
-      }
+        address: null,
+        tokens: {
+          gem: {},
+          sai: {},
+          sin: {},
+          skr: {},
+          pot: {}
+        },
+      },
     };
   }
   componentDidMount() {
@@ -38,50 +41,65 @@ class Main extends React.Component {
       if (balance !== this.state.balance) {
         this.setState({ balance });
       }
-    })
+    });
   };
   setTub = (address) => {
-    console.log(address);
-    const tub = web3.eth.contract(dstub.abi).at(address);
-    window.tub = tub;
-    ['gem','sai','sin','skr','pot'].forEach(x => {
-      tub[x]((e,r) => {
-        console.log({[x]: r});
-        const tub = {...this.state.tub};
-        tub[x] = r;
-        this.setState({ tub });
-        window[x] = web3.eth.contract(dstoken.abi).at(r);
+    if (web3.isAddress(address)) {
+      const tub = web3.eth.contract(dstub.abi).at(address);
+      window.tub = tub;
+      ['gem','sai','sin','skr','pot'].forEach(x => {
+        tub[x]((e,r) => {
+          console.log({[x]: r});
+          const tubState = {...this.state.tub};
+          tubState.tokens[x] = r;
+          this.setState({ tub: tubState });
+          window[x] = web3.eth.contract(dstoken.abi).at(r);
+        });
       });
-    });
+      const tubState = {...this.state.tub};
+      tubState.address = address;
+      this.setState({ tub: tubState });
+      // tub.address = address;
+      // this.setState({ tub: tubState });
+    } else {
+      console.log('Not an address...');
+    }
   };
   render() {
     //const weth = '0x53eccc9246c1e537d79199d0c7231e425a40f896';
-    const tub = this.state.tub;
+    const tokens = this.state.tub.tokens;
+    const showTokens = this.state.tub.address ? 'true' : false;
     return (
       <div>
         <div className="row">
-
-          <Token name="GEM"
-            description="Raw Collateral"
-            address={tub.gem}
-            account={this.props.coinbase}
-            color='bg-' />
-          <Token name="SKR"
-            description="Vote/Lock Collateral"
-            address={tub.skr}
-            account={this.props.coinbase}
-            color='bg-aqua' />
-          <Token name="SAI"
-            description="Stablecoin"
-            address={tub.sai}
-            account={this.props.coinbase}
-            color='bg-green' />
-          <Token name="SIN"
-            description="Debt (Negative Sai)"
-            address={tub.sin}
-            account={this.props.coinbase}
-            color='bg-red' />
-
+          {this.state.tub.address &&
+          <div>
+            <Token name="GEM"
+              description="Raw Collateral"
+              address={tokens.gem}
+              tub={this.state.tub.address}
+              account={this.props.coinbase}
+              color='bg-' />
+            <Token name="SKR"
+              description="Vote/Lock Collateral"
+              address={tokens.skr}
+              tub={this.state.tub.address}
+              account={this.props.coinbase}
+              color='bg-aqua' />
+            <Token name="SAI"
+              description="Stablecoin"
+              address={tokens.sai}
+              tub={this.state.tub.address}
+              account={this.props.coinbase}
+              color='bg-green' />
+            <Token name="SIN"
+              description="Debt (Negative Sai)"
+              address={tokens.sin}
+              tub={this.state.tub.address}
+              account={this.props.coinbase}
+              color='bg-red' />
+            </div>
+          }
         </div>
 
         <div className="row">
@@ -107,7 +125,7 @@ class Main extends React.Component {
             </div>
 
           </div>
-          <Medianizer />
+          {/*<Medianizer />*/}
 
         </div>
       </div >

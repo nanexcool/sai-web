@@ -8,29 +8,40 @@ class Token extends Component {
     super();
     this.state = {
       totalSupply: 0,
-      balance: 0
+      balance: 0,
+      tub: 0
     }
   }
 
-  componentDidMount() {
-    // this.token = web3.eth.contract(dstoken.abi).at(this.props.address);
-    // window[this.props.name.toLowerCase()] = this.token;
-    // this.token.totalSupply((error, result) => {
-    //   if (!error) {
-    //     const totalSupply = web3.toDecimal(web3.fromWei(result));
-    //     this.setState({ totalSupply });
-    //   } else {
-    //     console.log(error);
-    //   }
-    // });
-    // this.token.balanceOf(this.props.coinbase, (error, result) => {
-    //   if (!error) {
-    //     const balance = web3.toDecimal(web3.fromWei(result));
-    //     this.setState({ balance });
-    //   } else {
-    //     console.log(error);
-    //   }
-    // });
+  componentWillReceiveProps() {
+    console.log('Will receive props...');
+    if (web3.isAddress(this.props.address)) {
+      this.token = web3.eth.contract(dstoken.abi).at(this.props.address);
+      this.token.totalSupply((error, result) => {
+        if (!error) {
+          const totalSupply = web3.toDecimal(web3.fromWei(result));
+          this.setState({ totalSupply });
+        } else {
+          console.log(error);
+        }
+      });
+      this.token.balanceOf(this.props.account, (error, result) => {
+        if (!error) {
+          const balance = web3.toDecimal(web3.fromWei(result));
+          this.setState({ balance });
+        } else {
+          console.log(error);
+        }
+      });
+      this.token.balanceOf(this.props.tub, (error, result) => {
+        if (!error) {
+          const tub = web3.toDecimal(web3.fromWei(result));
+          this.setState({ tub });
+        } else {
+          console.log(error);
+        }
+      });
+    }
   }
 
   render() {
@@ -50,7 +61,13 @@ class Token extends Component {
               Yours: <AnimatedNumber value={this.state.balance} stepPrecision={4}/>
             </span>
             <span className="info-box-number">
-              Tub: <AnimatedNumber value={this.state.balance} stepPrecision={4}/>
+              Tub: <AnimatedNumber value={this.state.tub} stepPrecision={4}/>
+            </span>
+            <span className="info-box-number">
+              Pot: <AnimatedNumber value={0} stepPrecision={4}/>
+            </span>
+            <span className="info-box-text">
+              {this.props.description}
             </span>
           </div>
         </div>
